@@ -14,7 +14,7 @@ const AdminPanel = () => {
     <>
     <Navbar toggleSidebar={toggleSidebar}/>
     <Sidebar isSidebarOpen={isSidebarOpen}/>
-    <Outlet/>
+    <Outlet className='bg-gray-200'/>
     </>
   )
 }

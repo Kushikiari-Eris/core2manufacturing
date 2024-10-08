@@ -123,7 +123,7 @@ const Product = () => {
   return (
     <>
     
-        <div className="p-4 sm:ml-64 bg-gray-100">
+        <div className="p-4 sm:ml-64 bg-gray-100 h-screen">
         <div className="p-4   rounded-lg dark:border-gray-700 mt-20">
             <nav className="flex mb-4" aria-label="Breadcrumb">
             <ol className="inline-flex items-center space-x-1 md:space-x-3 rtl:space-x-reverse">
@@ -209,8 +209,8 @@ const Product = () => {
                         
                     </div>
                     
-                    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-4">
+                        <thead className="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-500 dark:text-gray-400">
                             <tr>
                                 <th scope="col" className="p-4">
                                    

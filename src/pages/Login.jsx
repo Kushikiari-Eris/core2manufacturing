@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useContext, useState } from 'react'
 import Swal from 'sweetalert2'
+import Cookies from 'js-cookie'
 import AuthContext from '../context/AuthContext'
 import bg2 from '../assets/image/bg2.jpg'
 
@@ -23,15 +24,23 @@ const Login = () => {
             password,
           }
     
-          await axios.post('http://localhost:7684/api/auth/login', loginData)
-          await getLoggedIn()
+         // Make login request to backend
+         const response = await axios.post('http://localhost:7684/api/auth/login', loginData);
 
-          Swal.fire({
-            title: 'Login Successful!',
-            text: 'You have logged in successfully.',
-            icon: 'success',
-            confirmButtonText: 'OK'
-          })
+         // Assuming response contains the user data with _id
+         const userId = response.data.user._id; // Extract userId from response
+         Cookies.set('userId', userId, { expires: 7 }); // Set userId in cookies for 7 days
+
+         // Update logged-in state
+         await getLoggedIn();
+
+         // Success alert
+         Swal.fire({
+             title: 'Login Successful!',
+             text: 'You have logged in successfully.',
+             icon: 'success',
+             confirmButtonText: 'OK'
+         });
 
 
         } catch (error) {

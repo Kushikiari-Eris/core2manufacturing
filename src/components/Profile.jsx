@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import AuthContext from '../context/AuthContext'
 import { MdOutlineDarkMode } from 'react-icons/md'
 import { IoMdNotificationsOutline } from 'react-icons/io'
+import Cookies from 'js-cookie'
 
 const Profile = () => {
 
@@ -12,9 +13,15 @@ const Profile = () => {
     const navigate = useNavigate()
 
     const logout = async () =>{
-        await axios.get('http://localhost:7684/api/auth/logout')
-        await getLoggedIn()
-        navigate('/')
+      await axios.get('http://localhost:7684/api/auth/logout');
+      const userId = Cookies.get('userId'); // Get the userId from cookies
+      if (userId) {
+          const cartKey = `cart_${userId}`; // Use the user-specific cart key
+          localStorage.removeItem(cartKey); // Remove the user's cart from local storage
+      }
+      Cookies.remove('userId'); // Clear userId cookie
+      await getLoggedIn(); // Refresh logged-in status
+      navigate('/');
     }
   return (
     <>

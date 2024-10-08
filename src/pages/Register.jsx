@@ -3,7 +3,7 @@ import React, { useContext, useState } from 'react'
 import AuthContext from '../context/AuthContext'
 import Swal from 'sweetalert2'
 import bg1 from '../assets/image/bg1.jpg'
-import { useNavigate } from 'react-router-dom'
+import Cookies from 'js-cookie'
 
 
 
@@ -30,8 +30,10 @@ const Register = () => {
         passwordVerify,
       }
 
-      await axios.post('http://localhost:7684/api/auth/register', registerData)
+      const response = await axios.post('http://localhost:7684/api/auth/register', registerData)
       await getLoggedIn()
+
+      Cookies.set('userId', response.data.user._id, { expires: 1 });
 
       Swal.fire({
         title: 'Login Successful!',
