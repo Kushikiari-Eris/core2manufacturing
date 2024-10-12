@@ -8,8 +8,11 @@ import AuthContext, { AuthContextProvider } from './context/AuthContext';
 import React, { useContext } from 'react';
 import AdminPanel from './pages/admin/AdminPanel';
 import Product from './pages/admin/products/Product';
+import ProductOrders from './pages/admin/products/ProductOrders'
 import ProductDetail from './pages/market/ProductDetail';
 import Cart from './pages/market/Cart';
+import Orders from './pages/market/Orders';
+import CheckOut from './pages/market/CheckOut';
 
 function App() {
   return (
@@ -39,10 +42,13 @@ function RoutesWrapper() {
       <Route path='/market' element={loggedIn && role === 'user' ? <Market /> : <Navigate to='/login' />} />
       <Route path='/market/product/:id' element={<ProductDetail />} />
       <Route path='/market/cart' element={<Cart/>}/>
+      <Route path='/market/checkout' element={<CheckOut/>}/>
+      <Route path='/market/orders' element={<Orders/>}/>
 
       {/**AdminPage */}
       <Route path='/admin' element={loggedIn && role === 'admin' ? <AdminPanel /> : <Navigate to='/login' />} >
         <Route path='product' element={<Product />} />
+        <Route path='orders' element={<ProductOrders/>}/>
       </Route>
     </Routes>
   );
