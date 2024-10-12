@@ -1,6 +1,6 @@
 import axios from 'axios'
-import React, { useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useContext, useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import AuthContext from '../context/AuthContext'
 import { MdOutlineDarkMode } from 'react-icons/md'
 import { IoMdNotificationsOutline } from 'react-icons/io'
@@ -9,6 +9,27 @@ import Cookies from 'js-cookie'
 const Profile = () => {
 
     const { getLoggedIn } = useContext(AuthContext)
+    const [role, setRole] = useState(null);
+
+    useEffect(() => {
+        const fetchUserRole = async () => {
+            try {
+                const response = await axios.get('http://localhost:7684/api/auth/loggedIn');
+                const { loggedIn, role } = response.data;
+
+                if (loggedIn) {
+                    setRole(role);
+                    // Optionally, set the role in a cookie for future use
+                    Cookies.set('userRole', role, { expires: 7 });
+                }
+            } catch (error) {
+                console.log('Error fetching user role:', error);
+            }
+        };
+
+        fetchUserRole();
+    }, []);
+
 
     const navigate = useNavigate()
 
@@ -62,6 +83,11 @@ const Profile = () => {
               <li>
                 <a>Settings</a>
               </li>
+              {role === 'user' && (
+                        <li>
+                            <Link to="/market/orders">Orders</Link>
+                        </li>
+                )}
               <li>
                 <a onClick={logout}>Log out</a>
               </li>

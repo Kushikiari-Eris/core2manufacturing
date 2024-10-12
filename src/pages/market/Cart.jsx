@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react'
 import Cookies from 'js-cookie'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
+import { useNavigate } from 'react-router-dom'
 
 const Cart = () => {
 
     const [cartItems, setCartItems] = useState([]);
     const userId = Cookies.get('userId'); // Get the userId from cookies
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (userId) {
@@ -15,6 +17,15 @@ const Cart = () => {
             setCartItems(items);
         }
     }, [userId]);
+
+
+  const calculateTotal = () => {
+    return cartItems.reduce((total, item) => total + item.price, 0);
+  };
+
+  const handleCheckout = () => {
+    navigate('/market/checkout', { state: { cartItems, total: calculateTotal() } }); // Navigate to the checkout page with the cart data
+  };  
 
 
   return (
@@ -33,7 +44,12 @@ const Cart = () => {
                 </div>
               </div>
             ))}
+            <div className="font-bold text-lg">
+              Total: ₱{calculateTotal()}
+            </div>
+             <button onClick={handleCheckout} className="mt-6 bg-green-500 text-white px-4 py-2 rounded">Checkout</button>
           </div>
+          
         ) : (
           <p>No items in the cart.</p>
         )}
