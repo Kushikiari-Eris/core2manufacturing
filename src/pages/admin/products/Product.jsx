@@ -3,6 +3,7 @@ import axios from 'axios'
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import axiosInstance from '../../../utils/AxiosInstance'
+import IMAGE_URL from '../../../utils/imageConstant'
 
 const Product = () => {
 
@@ -266,7 +267,7 @@ const Product = () => {
                                 product.map((prod) => (
                                     <tr key={prod._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                         <td className="px-6 py-4">
-                                            <img src={`http://localhost:7684/uploads${prod.image.startsWith('/') ? '' : '/'}${prod.image}`} alt='' className="w-16 h-16 object-cover rounded"/>
+                                            <img src={`${IMAGE_URL.IMAGE_URL}/uploads${prod.image.startsWith('/') ? '' : '/'}${prod.image}`} alt='' className="w-16 h-16 object-cover rounded"/>
                                         </td>
                                         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             {prod.productName}

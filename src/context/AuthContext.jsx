@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { createContext, useEffect, useState } from 'react'
+import axiosInstance from '../../src/utils/AxiosInstance'
 
 const AuthContext = createContext()
 
@@ -10,7 +11,7 @@ const AuthContextProvider = (props) => {
 
     const getLoggedIn = async () => {
         try {
-            const loggedInRes = await axios.get('http://localhost:7684/api/auth/loggedIn')
+            const loggedInRes = await axiosInstance.get('/loggedIn')
             setLoggedIn(loggedInRes.data.loggedIn)
             setRole(loggedInRes.data.role)
         } catch (error) {
