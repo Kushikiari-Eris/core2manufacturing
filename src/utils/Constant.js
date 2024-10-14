@@ -1,0 +1,1 @@
+export const BASE_URL = 'https://https://backend-core2.jjm-manufacturing.com/api'

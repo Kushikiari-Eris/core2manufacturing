@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie';
+import axiosInstance from '../../utils/AxiosInstance';
 
 const CheckOut = () => {
 
@@ -38,7 +39,7 @@ const CheckOut = () => {
     
         try {
             // Send the order data to the backend
-            const response = await fetch('http://localhost:7684/orders/createOrders', {
+            const response = await axiosInstance.get('/createOrders', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -40,7 +40,7 @@ function RoutesWrapper() {
 
       {/**MarketPage */}
       <Route path='/market' element={loggedIn && role === 'user' ? <Market /> : <Navigate to='/login' />} />
-      <Route path='/market/product/:id' element={<ProductDetail />} />
+      <Route path='/market/productDetail/:id' element={<ProductDetail />} />
       <Route path='/market/cart' element={<Cart/>}/>
       <Route path='/market/checkout' element={<CheckOut/>}/>
       <Route path='/market/orders' element={<Orders/>}/>

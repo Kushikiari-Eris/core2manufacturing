@@ -47,7 +47,7 @@ const Cart = () => {
             <div className="font-bold text-lg">
               Total: ₱{calculateTotal()}
             </div>
-             <button onClick={handleCheckout} className="mt-6 bg-green-500 text-white px-4 py-2 rounded">Checkout</button>
+             <button onClick={handleCheckout} className="mt-6 bg-green-500 text-white px-4 py-2 rounded">Place Order</button>
           </div>
           
         ) : (

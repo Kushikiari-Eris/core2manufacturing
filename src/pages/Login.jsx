@@ -4,6 +4,7 @@ import Swal from 'sweetalert2'
 import Cookies from 'js-cookie'
 import AuthContext from '../context/AuthContext'
 import bg2 from '../assets/image/bg2.jpg'
+import axiosInstance from '../utils/AxiosInstance'
 
 
 
@@ -25,7 +26,7 @@ const Login = () => {
           }
     
          // Make login request to backend
-         const response = await axios.post('http://localhost:7684/api/auth/login', loginData);
+         const response = await axiosInstance.post('/login', loginData);
 
          // Assuming response contains the user data with _id
          const userId = response.data.user._id; // Extract userId from response

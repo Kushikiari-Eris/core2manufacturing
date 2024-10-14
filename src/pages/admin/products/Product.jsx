@@ -2,17 +2,21 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import axiosInstance from '../../../utils/AxiosInstance'
 
 const Product = () => {
 
-    const [product, setProduct] = useState([]);
+    const [product, setProduct] = useState([])
     const [createProduct, setCreateProduct] = useState({
         productName: '',
         description: '',
         category: '',
         price: 0,
-    });
-    const [editProduct, setEditProduct] = useState(null); // Track the product being edited
+    })
+
+    const [editProduct, setEditProduct] = useState(null) // Track the product being edited
+    const [selectedFile, setSelectedFile] = useState(null)
+    const [image, setImage] = useState(null) // For storing the selected image file
 
     const createProductForm = async (e) => {
         e.preventDefault();
@@ -21,31 +25,49 @@ const Product = () => {
 
         if (!['soap', 'detergent'].includes(category)) {
             toast.error('Invalid category selected.')
-            return;
+            return
+        }
+
+        const formData = new FormData(); // Use FormData to handle file uploads
+
+        // Append text data
+        formData.append('productName', createProduct.productName)
+        formData.append('description', createProduct.description)
+        formData.append('category', category.toLowerCase())
+        formData.append('price', createProduct.price)
+        
+    
+        // Append the image file if selected
+        if (selectedFile) {
+          formData.append('image', selectedFile);
         }
 
         try {
             if (editProduct) {
-                // If editProduct exists, update the product
-                await axios.put(`http://localhost:7684/product/updateProduct/${editProduct._id}`, {
-                    ...createProduct,
-                    category: category.toLowerCase(),
+                // If editing, send a PUT request with the FormData
+                const res = await axiosInstance.put(`/updateProduct/${editProduct._id}`, formData, {
+                  headers: {
+                    'Content-Type': 'multipart/form-data',
+                  },
                 })
+        
 
-                // Update the product list
-                setProduct((prevProducts) =>
-                    prevProducts.map((prod) =>
-                        prod._id === editProduct._id ? { ...prod, ...createProduct } : prod
-                    )
-                );
+            // Update the product list with the new image URL
+            setProduct((prevProducts) =>
+                prevProducts.map((prod) =>
+                    prod._id === editProduct._id ? { ...prod, ...res.data.product } : prod
+                )
+            )
 
                 toast.success('Product updated successfully!')
+                
             } else {
-                // Create new product
-                const res = await axios.post('http://localhost:7684/product/create', {
-                    ...createProduct,
-                    category: category.toLowerCase(),
-                })
+               // For new product creation, use POST with FormData
+               const res = await axiosInstance.post('/create', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
 
                 // Append the new product to the existing list
                 setProduct((prevProducts) => [res.data.product, ...prevProducts])
@@ -60,28 +82,33 @@ const Product = () => {
                 category: '',
                 price: 0,
             });
-            setEditProduct(null);
+            setEditProduct(null)
+            setSelectedFile(null)
 
             // Close the modal
-            document.getElementById('my_modal_1').close();
+            document.getElementById('my_modal_1').close()
         } catch (error) {
-            console.error('Error creating/updating product:', error);
+            console.error('Error creating/updating product:', error)
             toast.error('Failed to create/update product. Please try again.')
         }
-    };
+    }
+
+    const handleFileChange = (e) => {
+        setSelectedFile(e.target.files[0]);
+      }
 
     const fetchProduct = async () => {
         try {
-            const response = await axios.get('http://localhost:7684/product/showAllProduct');
+            const response = await axiosInstance.get('/showAllProduct');
             if (response.status === 200) {
                 setProduct(response.data.products)
             } else {
-                console.error('Failed to fetch products');
+                console.error('Failed to fetch products')
             }
         } catch (error) {
-            console.error('Error fetching products:', error);
+            console.error('Error fetching products:', error)
         }
-    };
+    }
 
     const handleEditProduct = (prod) => {
         // Fill form with product data
@@ -93,28 +120,28 @@ const Product = () => {
         });
         setEditProduct(prod); // Set the product to be edited
         document.getElementById('my_modal_1').showModal() // Open modal
-    };
+    }
 
     const handleDeleteProduct = async (prodId) => {
-        const confirmDelete = window.confirm("Are you sure you want to delete this product?");
-        if (!confirmDelete) return;
+        const confirmDelete = window.confirm("Are you sure you want to delete this product?")
+        if (!confirmDelete) return
 
         try {
-            await axios.delete(`http://localhost:7684/product/deleteProduct/${prodId}`);
+            await axiosInstance.delete(`/deleteProduct/${prodId}`)
             
             // Remove the deleted product from the state
-            setProduct((prevProducts) => prevProducts.filter((prod) => prod._id !== prodId));
+            setProduct((prevProducts) => prevProducts.filter((prod) => prod._id !== prodId))
 
             toast.success('Product deleted successfully!')
         } catch (error) {
-            console.error('Error deleting product:', error);
+            console.error('Error deleting product:', error)
             toast.error('Failed to delete product. Please try again.')
         }
-    };
+    }
 
     useEffect(() => {
-        fetchProduct();
-    }, []);
+        fetchProduct()
+    }, [])
     
     
 
@@ -182,6 +209,10 @@ const Product = () => {
                                     <h3 className="font-bold text-lg mb-5">{editProduct ? 'Edit Product' : 'Add new product'}</h3>
                                     <form className="max-w-sm mx-auto" onSubmit={createProductForm}>
                                         <div className="mb-5">
+                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Image</label>
+                                            <input type="file" name='image' onChange={handleFileChange} className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"/>
+                                        </div>
+                                        <div className="mb-5">
                                             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Name</label>
                                             <input type="text" id="productName" value={createProduct.productName} onChange={(e) => setCreateProduct({ ...createProduct, productName: e.target.value })} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Product Name" required />
                                         </div>
@@ -212,9 +243,7 @@ const Product = () => {
                     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-4">
                         <thead className="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-500 dark:text-gray-400">
                             <tr>
-                                <th scope="col" className="p-4">
-                                   
-                                </th>
+                            <th scope="col" className="p-4"></th>
                                 <th scope="col" className="px-6 py-3">
                                     Product Name
                                 </th>
@@ -236,11 +265,8 @@ const Product = () => {
                             {product && product.length > 0 ? (
                                 product.map((prod) => (
                                     <tr key={prod._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                        <td className="w-4 p-4">
-                                            <div className="flex items-center">
-                                                <input id={`checkbox-${prod._id}`} type="checkbox" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                                <label htmlFor={`checkbox-${prod._id}`} className="sr-only">checkbox</label>
-                                            </div>
+                                        <td className="px-6 py-4">
+                                            <img src={`http://localhost:7684/uploads${prod.image.startsWith('/') ? '' : '/'}${prod.image}`} alt='' className="w-16 h-16 object-cover rounded"/>
                                         </td>
                                         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             {prod.productName}

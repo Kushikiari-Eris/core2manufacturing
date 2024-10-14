@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Cookies from 'js-cookie'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
+import axiosInstance from '../../utils/AxiosInstance'
 
 
 const Orders = () => {
@@ -15,7 +16,7 @@ const Orders = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await fetch(`http://localhost:7684/orders/showOrdersByUser/${userId}`);
+                const response = await axiosInstance.get(`/showOrdersByUser/${userId}`);
                 
                 if (!response.ok) {
                     throw new Error('Failed to fetch orders');

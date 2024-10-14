@@ -4,6 +4,7 @@ import AuthContext from '../context/AuthContext'
 import Swal from 'sweetalert2'
 import bg1 from '../assets/image/bg1.jpg'
 import Cookies from 'js-cookie'
+import axiosInstance from '../utils/AxiosInstance'
 
 
 
@@ -30,7 +31,7 @@ const Register = () => {
         passwordVerify,
       }
 
-      const response = await axios.post('http://localhost:7684/api/auth/register', registerData)
+      const response = await axiosInstance.post('/register', registerData)
       await getLoggedIn()
 
       Cookies.set('userId', response.data.user._id, { expires: 1 });

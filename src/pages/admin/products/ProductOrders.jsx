@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
+import axiosInstance from '../../../utils/AxiosInstance';
 
 const ProductOrders = () => {
 
@@ -13,7 +14,7 @@ const ProductOrders = () => {
             setLoading(true); // Start loading before fetch
             try {
                 // Use the correct endpoint for fetching all orders for admin
-                const response = await fetch('http://localhost:7684/orders/showAllOrders'); // Assuming this endpoint fetches all orders
+                const response = await axiosInstance.get('/showAllOrders'); // Assuming this endpoint fetches all orders
                 if (!response.ok) {
                     throw new Error('Failed to fetch orders');
                 }
