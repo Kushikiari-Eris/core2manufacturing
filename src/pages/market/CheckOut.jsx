@@ -39,7 +39,7 @@ const CheckOut = () => {
     
         try {
             // Send the order data to the backend
-            const response = await axiosInstance.get('/createOrders', {
+            const response = await axios.get('http://localhost:7684/api/createOrders', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

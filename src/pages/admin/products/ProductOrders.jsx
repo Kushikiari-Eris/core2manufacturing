@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import axiosInstance from '../../../utils/AxiosInstance';
+import axios from 'axios';
 
 const ProductOrders = () => {
 
@@ -11,24 +12,21 @@ const ProductOrders = () => {
 
     useEffect(() => {
         const fetchOrders = async () => {
-            setLoading(true); // Start loading before fetch
-            try {
-                // Use the correct endpoint for fetching all orders for admin
-                const response = await axiosInstance.get('/showAllOrders'); // Assuming this endpoint fetches all orders
-                if (!response.ok) {
-                    throw new Error('Failed to fetch orders');
-                }
-                const data = await response.json();
-                setOrders(data);
-                setLoading(false); // Stop loading after successful fetch
-            } catch (err) {
-                setError(err.message);
-                setLoading(false); // Stop loading in case of an error
-            }
+          setLoading(true); // Start loading before fetch
+          try {
+            const response = await axios.get('http://localhost:7684/api/showAllOrders');
+            console.log('Fetched orders:', response.data); // Debugging log
+            setOrders(response.data);
+            setLoading(false); // Stop loading after successful fetch
+          } catch (err) {
+            console.error('Error fetching orders:', err); // Debugging log
+            setError(err.message);
+            setLoading(false); // Stop loading in case of an error
+          }
         };
-
+      
         fetchOrders();
-    }, []);
+      }, []);
 
     // Open modal and set selected order
     const openModal = (order) => {

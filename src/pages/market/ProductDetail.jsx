@@ -4,19 +4,20 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
-import axiosInstance from '../../utils/AxiosInstance';
 
 const ProductDetail = () => {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
+    const [quantity, setQuantity] = useState(1);
+    const [totalPrice, setTotalPrice] = useState(0); // State to track total price
     const navigate = useNavigate();
 
-    // Fetch product details
     const fetchProduct = async () => {
         try {
-            const response = await axiosInstance.get(`/showOnlyOneProduct/${id}`);
+            const response = await axios.get(`http://localhost:7684/api/showOnlyOneProduct/${id}`);
             if (response.status === 200) {
                 setProduct(response.data.product);
+                setTotalPrice(response.data.product.price); // Set initial price based on product price
             } else {
                 console.error('Failed to fetch product');
             }
@@ -29,72 +30,97 @@ const ProductDetail = () => {
         fetchProduct();
     }, [id]);
 
-    // Handle "Add to Cart" button click
+    // Function to handle quantity change and update total price
+    const handleQuantityChange = (newQuantity) => {
+        if (newQuantity > 0) {
+            setQuantity(newQuantity);
+            setTotalPrice(newQuantity * product.price); // Update total price
+        }
+    };
+
     const handleAddToCart = () => {
-        const userId = Cookies.get('userId'); // Get the userId from cookies
+        const userId = Cookies.get('userId');
         if (!userId) {
             console.error("User is not logged in. Cannot add to cart.");
             return;
         }
 
-        // Use userId to create a unique cart key
         const cartKey = `cart_${userId}`;
-
-        // Get the existing cart from local storage (if it exists)
         let cartItems = localStorage.getItem(cartKey) ? JSON.parse(localStorage.getItem(cartKey)) : [];
 
-        // Add the new product to the cart
-        cartItems.push(product);
+        // Add product with selected quantity to the cart
+        cartItems.push({
+            ...product,
+            quantity, // Add selected quantity to the product data
+            totalPrice, // Add total price
+        });
 
-        // Save the updated cart in local storage
         localStorage.setItem(cartKey, JSON.stringify(cartItems));
-
-        // Navigate to the cart page
         navigate('/market/cart');
     };
 
     return (
-        <>
+        <div className="flex flex-col min-h-screen">
             <Navbar />
+            
+            <main className="flex-grow py-16 px-8 mt-20">
+                {product ? (
+                    <div className="mx-auto container grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <img src={`http://localhost:7684/uploads/${product.image}`} alt={product.productName} className="h-[36rem] object-cover rounded-md"/>
+                        </div>
 
-            <div className="flex justify-center items-center min-h-screen">
-                <div role="status" className="space-y-8 md:space-y-0 md:space-x-8 rtl:space-x-reverse md:flex md:items-center">
-                    <div className="flex items-center justify-center w-full h-96 bg-gray-300 rounded sm:w-96 dark:bg-gray-700">
-                        {product ? (
-                            <img
-                                src={`http://localhost:7684/uploads/${product.image}`} // Display the fetched product image
-                                alt={product.productName}
-                                className="w-full h-full object-cover rounded-lg"
-                            />
-                        ) : (
-                            <p>Loading...</p>
-                        )}
-                    </div>
+                        <div className="flex flex-col">
+                            <p className="mb-4 font-bold text-4xl">
+                                {product.productName}
+                            </p>
+                            <div className="flex items-center mb-4 text-gray-400">
+                                <p className="capitalize ">Category: {product.category}</p>
+                            </div>
+                            <div className="flex items-center mb-4 text-gray-400">
+                                <p className="capitalize ">Description: {product.description}</p>
+                            </div>
+                            {/* Display total price based on quantity */}
+                            <p className="text-gray-900 mb-4 font-bold text-3xl">
+                                ₱{totalPrice} {/* Updated total price */}
+                            </p>
 
-                    <div className="w-full">
-                        {product ? (
-                            <div className="w-80">
-                                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{product.productName}</h3>
-                                <p className="mt-2 text-gray-700 dark:text-gray-400">{product.description}</p>
-                                <p className="mt-4 text-xl font-bold text-gray-900 dark:text-white">₱{product.price}</p>
+                            <div className="mb-4">
+                                <p className='font-bold'>Quantity</p>
+                                <div className="flex items-center mt-2">
+                                    <button
+                                        onClick={() => handleQuantityChange(quantity > 1 ? quantity - 1 : 1)}
+                                        className="px-4 py-2 border bg-gray-200"
+                                    >
+                                        -
+                                    </button>
+                                    <span className="px-4 py-2 border bg-white">{quantity}</span>
+                                    <button
+                                        onClick={() => handleQuantityChange(quantity + 1)}
+                                        className="px-4 py-2 border bg-gray-200"
+                                    >
+                                        +
+                                    </button>
+                                </div>
+                            </div>
 
-                                {/* Add to Cart button */}
+                            <div className="my-8">
                                 <button
-                                    className="mt-4 py-2 px-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300"
                                     onClick={handleAddToCart}
+                                    className="w-full py-3 bg-black text-white rounded-lg hover:bg-gray-800"
                                 >
                                     Add to Cart
                                 </button>
                             </div>
-                        ) : (
-                            <p>Loading product details...</p>
-                        )}
+                        </div>
                     </div>
-                </div>
-            </div>
+                ) : (
+                    <p>Loading product details...</p>
+                )}
+            </main>
 
             <Footer />
-        </>
+        </div>
     );
 };
 

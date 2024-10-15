@@ -3,6 +3,7 @@ import Cookies from 'js-cookie'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import axiosInstance from '../../utils/AxiosInstance'
+import axios from 'axios'
 
 
 const Orders = () => {
@@ -16,7 +17,7 @@ const Orders = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await axiosInstance.get(`/showOrdersByUser/${userId}`);
+                const response = await axios.get(`http://localhost:7684/api/showOrdersByUser/${userId}`);
                 
                 if (!response.ok) {
                     throw new Error('Failed to fetch orders');

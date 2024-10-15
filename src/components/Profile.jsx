@@ -15,7 +15,7 @@ const Profile = () => {
     useEffect(() => {
         const fetchUserRole = async () => {
             try {
-                const response = await axiosInstance.get('/loggedIn');
+                const response = await axios.get('http://localhost:7684/api/loggedIn');
                 const { loggedIn, role } = response.data;
 
                 if (loggedIn) {
@@ -35,7 +35,7 @@ const Profile = () => {
     const navigate = useNavigate()
 
     const logout = async () =>{
-      await axiosInstance.get('/logout');
+      await axios.get('http://localhost:7684/api/logout');
       const userId = Cookies.get('userId'); // Get the userId from cookies
       if (userId) {
           const cartKey = `cart_${userId}`; // Use the user-specific cart key

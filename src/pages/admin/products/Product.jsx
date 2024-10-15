@@ -3,7 +3,7 @@ import axios from 'axios'
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import axiosInstance from '../../../utils/AxiosInstance'
-import IMAGE_URL from '../../../utils/imageConstant'
+
 
 const Product = () => {
 
@@ -17,7 +17,6 @@ const Product = () => {
 
     const [editProduct, setEditProduct] = useState(null) // Track the product being edited
     const [selectedFile, setSelectedFile] = useState(null)
-    const [image, setImage] = useState(null) // For storing the selected image file
 
     const createProductForm = async (e) => {
         e.preventDefault();
@@ -46,7 +45,7 @@ const Product = () => {
         try {
             if (editProduct) {
                 // If editing, send a PUT request with the FormData
-                const res = await axiosInstance.put(`/updateProduct/${editProduct._id}`, formData, {
+                const res = await axios.put(`http://localhost:7684/api/updateProduct/${editProduct._id}`, formData, {
                   headers: {
                     'Content-Type': 'multipart/form-data',
                   },
@@ -64,7 +63,7 @@ const Product = () => {
                 
             } else {
                // For new product creation, use POST with FormData
-               const res = await axiosInstance.post('/create', formData, {
+               const res = await axios.post('http://localhost:7684/api/create', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
@@ -100,7 +99,7 @@ const Product = () => {
 
     const fetchProduct = async () => {
         try {
-            const response = await axiosInstance.get('/showAllProduct');
+            const response = await axios.get('http://localhost:7684/api/showAllProduct');
             if (response.status === 200) {
                 setProduct(response.data.products)
             } else {
@@ -128,7 +127,7 @@ const Product = () => {
         if (!confirmDelete) return
 
         try {
-            await axiosInstance.delete(`/deleteProduct/${prodId}`)
+            await axios.delete(`http://localhost:7684/api/deleteProduct/${prodId}`)
             
             // Remove the deleted product from the state
             setProduct((prevProducts) => prevProducts.filter((prod) => prod._id !== prodId))
@@ -267,7 +266,7 @@ const Product = () => {
                                 product.map((prod) => (
                                     <tr key={prod._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                         <td className="px-6 py-4">
-                                            <img src={`${IMAGE_URL.IMAGE_URL}/uploads${prod.image.startsWith('/') ? '' : '/'}${prod.image}`} alt='' className="w-16 h-16 object-cover rounded"/>
+                                            <img src={`http://localhost:7684/uploads${prod.image.startsWith('/') ? '' : '/'}${prod.image}`} alt='' className="w-16 h-16 object-cover rounded"/>
                                         </td>
                                         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             {prod.productName}

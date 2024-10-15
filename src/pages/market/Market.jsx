@@ -14,9 +14,9 @@ const Market = () => {
 
   const fetchProduct = async () => {
     try {
-      const response = await axiosInstance.get('/showAllProduct');
+      const response = await axios.get('http://localhost:7684/api/showAllProduct');
       if (response.status === 200) {
-        setProduct(response.data.products);
+        setProduct(response.data.products.slice(0, 5));
       } else {
         console.error('Failed to fetch products');
       }
@@ -53,7 +53,13 @@ const Market = () => {
 
       <div className="flex justify-center items-center mt-20">
         <div className="w-full max-w-7xl p-4">
-          <h2 className="text-2xl font-bold mb-4 text-center">Latest Products</h2>
+          <div className='flex justify-between mb-3 items-center'>
+            <h2 className="text-2xl font-bold mb-4 text-center ml-5">Latest Products</h2>
+            <a href='/market/allproducts' className='mr-5 flex font-bold text-sm items-center px-4 py-2 rounded-lg hover:bg-green-400'>SEE ALL<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" class="size-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5" />
+              </svg>
+            </a>
+          </div>
           
           {/* Swiper container */}
           <Swiper
@@ -93,7 +99,7 @@ const Market = () => {
           </Swiper>
 
           {/* Custom Pagination container (placed outside the Swiper) */}
-          <div className="custom-pagination flex justify-center mt-6"></div>
+          <div className="custom-pagination flex justify-center mt-6 mb-20"></div>
         </div>
       </div>
 

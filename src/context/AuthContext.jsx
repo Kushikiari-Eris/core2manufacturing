@@ -11,7 +11,7 @@ const AuthContextProvider = (props) => {
 
     const getLoggedIn = async () => {
         try {
-            const loggedInRes = await axiosInstance.get('/loggedIn')
+            const loggedInRes = await axios.get('http://localhost:7684/api/loggedIn')
             setLoggedIn(loggedInRes.data.loggedIn)
             setRole(loggedInRes.data.role)
         } catch (error) {

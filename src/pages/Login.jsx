@@ -26,7 +26,7 @@ const Login = () => {
           }
     
          // Make login request to backend
-         const response = await axiosInstance.post('/login', loginData);
+         const response = await axios.post('http://localhost:7684/api/login', loginData);
 
          // Assuming response contains the user data with _id
          const userId = response.data.user._id; // Extract userId from response

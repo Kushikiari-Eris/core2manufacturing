@@ -13,6 +13,7 @@ import ProductDetail from './pages/market/ProductDetail';
 import Cart from './pages/market/Cart';
 import Orders from './pages/market/Orders';
 import CheckOut from './pages/market/CheckOut';
+import AllProducts from './pages/market/AllProducts';
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function RoutesWrapper() {
 
       {/**MarketPage */}
       <Route path='/market' element={loggedIn && role === 'user' ? <Market /> : <Navigate to='/login' />} />
+      <Route path='/market/allproducts' element={<AllProducts/>}/>
       <Route path='/market/productDetail/:id' element={<ProductDetail />} />
       <Route path='/market/cart' element={<Cart/>}/>
       <Route path='/market/checkout' element={<CheckOut/>}/>

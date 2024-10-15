@@ -31,7 +31,7 @@ const Register = () => {
         passwordVerify,
       }
 
-      const response = await axiosInstance.post('/register', registerData)
+      const response = await axios.post('http://localhost:7684/api/register', registerData)
       await getLoggedIn()
 
       Cookies.set('userId', response.data.user._id, { expires: 1 });
