@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+<<<<<<< HEAD
 import axios from 'axios';
 import {
     Step,
@@ -12,6 +13,11 @@ import {
 import { faCheckCircle, faTruck, faGift } from '@fortawesome/free-solid-svg-icons';
 
   
+=======
+import Cookies from 'js-cookie';
+import axiosInstance from '../../../utils/AxiosInstance';
+import axios from 'axios';
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
 
 const ProductOrders = () => {
 
@@ -19,13 +25,20 @@ const ProductOrders = () => {
     const [selectedOrder, setSelectedOrder] = useState(null); // Hold selected order for modal
     const [loading, setLoading] = useState(true); // Loading state
     const [error, setError] = useState(null); // Error state
+<<<<<<< HEAD
     const [activeStep, setActiveStep] = React.useState(0);
+=======
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
 
     useEffect(() => {
         const fetchOrders = async () => {
           setLoading(true); // Start loading before fetch
           try {
             const response = await axios.get('http://localhost:7684/api/showAllOrders');
+<<<<<<< HEAD
+=======
+            console.log('Fetched orders:', response.data); // Debugging log
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
             setOrders(response.data);
             setLoading(false); // Stop loading after successful fetch
           } catch (err) {
@@ -86,7 +99,11 @@ const ProductOrders = () => {
                             </li>
                         </ol>
                     </nav>
+<<<<<<< HEAD
                     <h2 className="mb-4 text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-4xl dark:text-gray-900">Customer Orders</h2>
+=======
+                    <h2 className="mb-4 text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-4xl dark:text-gray-900">Orders</h2>
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
 
 
                     <div className="relative flex-grow">
@@ -96,12 +113,21 @@ const ProductOrders = () => {
                                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                             </svg>
                         </div>
+<<<<<<< HEAD
                         <input type="text" id="table-search" className="flex  pt-4 ps-10 pb-4 text-sm text-gray-900 border border-gray-300 rounded-lg w-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for items"/>
                     </div>
                     {/* Orders Table */}
                     <div className="relative overflow-x-auto">
                       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-4">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-500 dark:text-gray-400">
+=======
+                        <input type="text" id="table-search" className="flex block pt-4 ps-10 pb-4 text-sm text-gray-900 border border-gray-300 rounded-lg w-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for items"/>
+                    </div>
+                    {/* Orders Table */}
+                    <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-4">
+                        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
                                 <tr>
                                     <th scope="col" className="px-6 py-3">Order ID</th>
                                     <th scope="col" className="px-6 py-3">Customer Name</th>
@@ -114,7 +140,11 @@ const ProductOrders = () => {
                             <tbody>
                                 {orders.length > 0 ? (
                                     orders.map((order, index) => (
+<<<<<<< HEAD
                                         <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+=======
+                                        <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
                                             <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                 {order._id}
                                             </th>
@@ -123,8 +153,13 @@ const ProductOrders = () => {
                                             <td className="px-6 py-4">{order.paymentMethod}</td>
                                             <td className="px-6 py-4">{new Date(order.orderDate).toLocaleDateString()}</td>
                                             <td className="px-6 py-4">
+<<<<<<< HEAD
                                                 <button className="font-medium text-white dark:text-blue-500 border p-2 rounded-md bg-blue-500 hover:bg-blue-300" onClick={() => openModal(order)}>
                                                    View Details
+=======
+                                                <button className="font-medium text-blue-600 dark:text-blue-500 hover:underline" onClick={() => openModal(order)}>
+                                                    View Details
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
                                                 </button>
                                             </td>
                                         </tr>
@@ -140,6 +175,7 @@ const ProductOrders = () => {
 
                     {/* Modal for Order Details and Shipment Progress */}
                     <dialog id="shipment_modal" className="modal">
+<<<<<<< HEAD
 
                     {selectedOrder && (
                          <section className=" container mx-auto py-10 px-8 border bg-white max-h-[90vh] overflow-auto rounded relative">
@@ -331,6 +367,48 @@ const ProductOrders = () => {
                             </div>
                           </div>
                       </section>
+=======
+                        {selectedOrder && (
+                            <div className="modal-box">
+                                <form method="dialog">
+                                    <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                </form>
+                                <h3 className="font-bold text-lg mb-4">Order #{selectedOrder._id}</h3>
+                                <p><strong>Name:</strong> {selectedOrder.customerName}</p>
+                                <p><strong>Address:</strong> {selectedOrder.address}</p>
+                                <p><strong>Contact Number:</strong> {selectedOrder.contactNumber}</p>
+                                <p><strong>Total Amount:</strong> ₱{selectedOrder.totalAmount}</p>
+                                <p><strong>Payment Method:</strong> {selectedOrder.paymentMethod}</p>
+                                <p><strong>Order Date:</strong> {new Date(selectedOrder.orderDate).toLocaleDateString()}</p>
+
+                                {/* Shipment Status Dropdown */}
+                                <div className="my-4">
+                                    <label className="block font-bold mb-2">Shipment Status:</label>
+                                    <select className="w-full p-2 border rounded">
+                                        <option value="Processing">Processing</option>
+                                        <option value="Shipped">Shipped</option>
+                                        <option value="Delivered">Delivered</option>
+                                    </select>
+                                </div>
+
+                                {/* Progress Bar */}
+                                <div className="relative pt-1">
+                                    <div className="flex mb-2 items-center justify-between">
+                                        <div>
+                                            <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-blue-600 bg-blue-200">
+                                                Processing
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="overflow-hidden h-2 text-xs flex rounded bg-blue-200">
+                                        <div
+                                            style={{ width: `33%` }}
+                                            className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500"
+                                        ></div>
+                                    </div>
+                                </div>
+                            </div>
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
                         )}
                     </dialog>
                 </div>

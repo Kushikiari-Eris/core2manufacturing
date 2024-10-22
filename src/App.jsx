@@ -14,7 +14,10 @@ import Cart from './pages/market/Cart';
 import Orders from './pages/market/Orders';
 import CheckOut from './pages/market/CheckOut';
 import AllProducts from './pages/market/AllProducts';
+<<<<<<< HEAD
 import Dashboard from './pages/admin/Dashboard';
+=======
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
 
 function App() {
   return (
@@ -37,8 +40,13 @@ function RoutesWrapper() {
       <Route path='/' element={<Home />} />
 
       {/**Auth */}
+<<<<<<< HEAD
       <Route path='/register' element={!loggedIn ? <Register /> : role === 'admin' ? <Navigate to='/admin/dashboard' /> : <Navigate to='/market' />} />
       <Route path='/login' element={!loggedIn ? <Login /> : role === 'admin' ? <Navigate to='/admin/dashboard' /> : <Navigate to='/market' />} />
+=======
+      <Route path='/register' element={!loggedIn ? <Register /> : role === 'admin' ? <Navigate to='/admin' /> : <Navigate to='/market' />} />
+      <Route path='/login' element={!loggedIn ? <Login /> : role === 'admin' ? <Navigate to='/admin' /> : <Navigate to='/market' />} />
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
 
       {/**MarketPage */}
       <Route path='/market' element={loggedIn && role === 'user' ? <Market /> : <Navigate to='/login' />} />
@@ -52,7 +60,10 @@ function RoutesWrapper() {
       <Route path='/admin' element={loggedIn && role === 'admin' ? <AdminPanel /> : <Navigate to='/login' />} >
         <Route path='product' element={<Product />} />
         <Route path='orders' element={<ProductOrders/>}/>
+<<<<<<< HEAD
         <Route path='dashboard' element={<Dashboard/>}/>
+=======
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
       </Route>
     </Routes>
   );

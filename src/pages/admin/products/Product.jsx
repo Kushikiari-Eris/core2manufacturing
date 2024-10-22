@@ -12,13 +12,20 @@ const Product = () => {
         productName: '',
         description: '',
         category: '',
+<<<<<<< HEAD
         sizePrice: { S: 0, M: 0, L: 0 },
+=======
+        price: 0,
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
     })
 
     const [editProduct, setEditProduct] = useState(null) // Track the product being edited
     const [selectedFile, setSelectedFile] = useState(null)
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
     const createProductForm = async (e) => {
         e.preventDefault();
 
@@ -29,6 +36,7 @@ const Product = () => {
             return
         }
 
+<<<<<<< HEAD
         const formData = new FormData(); 
         
         const prices = [
@@ -36,12 +44,19 @@ const Product = () => {
             { size: 'Medium', price: createProduct.sizePrice.M },
             { size: 'Large', price: createProduct.sizePrice.L },
         ];
+=======
+        const formData = new FormData(); // Use FormData to handle file uploads
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
 
         // Append text data
         formData.append('productName', createProduct.productName)
         formData.append('description', createProduct.description)
         formData.append('category', category.toLowerCase())
+<<<<<<< HEAD
         formData.append('prices', JSON.stringify(prices))
+=======
+        formData.append('price', createProduct.price)
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
         
     
         // Append the image file if selected
@@ -87,7 +102,11 @@ const Product = () => {
                 productName: '',
                 description: '',
                 category: '',
+<<<<<<< HEAD
                 sizePrice: { S: 0, M: 0, L: 0 },
+=======
+                price: 0,
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
             });
             setEditProduct(null)
             setSelectedFile(null)
@@ -118,6 +137,7 @@ const Product = () => {
     }
 
     const handleEditProduct = (prod) => {
+<<<<<<< HEAD
         console.log(prod); // Log the product to check its structure
 
         // Initialize sizePrice object
@@ -129,15 +149,25 @@ const Product = () => {
         });
     
         // Set the state with the properly structured sizePrice
+=======
+        // Fill form with product data
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
         setCreateProduct({
             productName: prod.productName,
             description: prod.description,
             category: prod.category,
+<<<<<<< HEAD
             sizePrice, // Now this will have the correct values
         });
         
         setEditProduct(prod);
         document.getElementById('my_modal_1').showModal();
+=======
+            price: prod.price,
+        });
+        setEditProduct(prod); // Set the product to be edited
+        document.getElementById('my_modal_1').showModal() // Open modal
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
     }
 
     const handleDeleteProduct = async (prodId) => {
@@ -201,7 +231,11 @@ const Product = () => {
             <h2 className="mb-4 text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-4xl dark:text-gray-900">All Products</h2>
             
 
+<<<<<<< HEAD
                 <div className="relative  sm:rounded-lg flex items-center justify-between">
+=======
+                <div className="relative overflow-x-auto shadow-md sm:rounded-lg flex items-center justify-between">
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
                     <div className="relative flex-grow">
                             <label htmlFor="table-search" className="sr-only">Search</label>
                             <div className="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -209,17 +243,28 @@ const Product = () => {
                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                                 </svg>
                             </div>
+<<<<<<< HEAD
                             <input type="text" id="table-search" className=" block pt-4 ps-10 pb-4 text-sm text-gray-900 border border-gray-300 rounded-lg w-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for items"/>
                         </div>
                         
                         
                         <button className="text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-sm px-5 py-4 text-center ml-4 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"  onClick={() => {
+=======
+                            <input type="text" id="table-search" className="flex block pt-4 ps-10 pb-4 text-sm text-gray-900 border border-gray-300 rounded-lg w-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for items"/>
+                        </div>
+                        {/* Open the modal using document.getElementById('ID').showModal() method */}
+                        <button className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ml-4 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"  onClick={() => {
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
                                 setEditProduct(null); // Clear any existing edit product
                                 setCreateProduct({
                                     productName: '',
                                     description: '',
                                     category: '',
+<<<<<<< HEAD
                                     sizePrice: { S: 0, M: 0, L: 0 },
+=======
+                                    price: 0,
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
                                 });
                                 document.getElementById('my_modal_1').showModal();
                             }}>Add new</button>
@@ -247,6 +292,7 @@ const Product = () => {
                                             </select>
                                         </div>
                                         <div className="mb-5">
+<<<<<<< HEAD
                                             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Small (S) Price</label>
                                             <input 
                                                 type="number" 
@@ -286,6 +332,10 @@ const Product = () => {
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                 placeholder="Price for L" required 
                                             />
+=======
+                                            <label htmlFor="number-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price:</label>
+                                            <input  type="number" id="number-input" value={createProduct.price || ""}  onChange={(e) => setCreateProduct({ ...createProduct, price: parseFloat(e.target.value) || 0 })}   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Price" required />
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
                                         </div>
                                         <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">{editProduct ? 'Update' : 'Add'}</button>
                                         <button type="button" onClick={() => document.getElementById('my_modal_1').close()} className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
@@ -299,7 +349,11 @@ const Product = () => {
                     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-4">
                         <thead className="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-500 dark:text-gray-400">
                             <tr>
+<<<<<<< HEAD
                             <th scope="col" className="px-6 py-3"> Product Image</th>
+=======
+                            <th scope="col" className="p-4"></th>
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
                                 <th scope="col" className="px-6 py-3">
                                     Product Name
                                 </th>
@@ -322,13 +376,18 @@ const Product = () => {
                                 product.map((prod) => (
                                     <tr key={prod._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                         <td className="px-6 py-4">
+<<<<<<< HEAD
                                             <img src={`http://localhost:7684/uploads${prod.image.startsWith('/') ? '' : '/'}${prod.image}`} alt='' className="w-[100px] h-auto max-w-none object-cover rounded "/>
+=======
+                                            <img src={`http://localhost:7684/uploads${prod.image.startsWith('/') ? '' : '/'}${prod.image}`} alt='' className="w-16 h-16 object-cover rounded"/>
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
                                         </td>
                                         <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             {prod.productName}
                                         </th>
                                         <td className="px-6 py-4">{prod.description}</td>
                                         <td className="px-6 py-4">{prod.category}</td>
+<<<<<<< HEAD
                                         <td className="px-6 py-4">
                                             {prod.prices.length > 0 ? (
                                                 prod.prices.map((priceObj) => (
@@ -343,6 +402,12 @@ const Product = () => {
                                         <td className="px-6 py-10 flex">
                                             <button className="font-medium text-white dark:text-blue-500 border p-2 rounded-md bg-blue-500 hover:bg-blue-300 mr-1" onClick={() => handleEditProduct(prod)}>Edit</button>
                                             <button className="font-medium text-white dark:text-blue-500 border p-2 rounded-md bg-red-500 hover:bg-red-300"  onClick={() => handleDeleteProduct(prod._id)}>Delete</button>
+=======
+                                        <td className="px-6 py-4">{prod.price}</td>
+                                        <td className="px-6 py-4">
+                                            <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline mr-4" onClick={() => handleEditProduct(prod)}>Edit</a>
+                                            <a href="#" className="font-medium text-red-600 dark:text-red-500 hover:underline"  onClick={() => handleDeleteProduct(prod._id)}>Delete</a>
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
                                         </td>
                                     </tr>
                                 ))

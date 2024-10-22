@@ -9,21 +9,31 @@ const ProductDetail = () => {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
+<<<<<<< HEAD
     const [totalPrice, setTotalPrice] = useState(0);
     const [selectedSize, setSelectedSize] = useState('');
     const [addedToCart, setAddedToCart] = useState(false);
     const navigate = useNavigate();
 
     // Fetch product details
+=======
+    const [totalPrice, setTotalPrice] = useState(0); // State to track total price
+    const navigate = useNavigate();
+
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
     const fetchProduct = async () => {
         try {
             const response = await axios.get(`http://localhost:7684/api/showOnlyOneProduct/${id}`);
             if (response.status === 200) {
                 setProduct(response.data.product);
+<<<<<<< HEAD
                 // Set initial total price based on the first size or leave it at zero
                 if (response.data.product.prices.length > 0) {
                     setTotalPrice(response.data.product.prices[0].price);
                 }
+=======
+                setTotalPrice(response.data.product.price); // Set initial price based on product price
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
             } else {
                 console.error('Failed to fetch product');
             }
@@ -32,11 +42,15 @@ const ProductDetail = () => {
         }
     };
 
+<<<<<<< HEAD
     // Effect to fetch product when component mounts or id changes
+=======
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
     useEffect(() => {
         fetchProduct();
     }, [id]);
 
+<<<<<<< HEAD
     // Effect to redirect to cart when item is added
     useEffect(() => {
         if (addedToCart) {
@@ -44,10 +58,13 @@ const ProductDetail = () => {
         }
     }, [addedToCart, navigate]);
 
+=======
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
     // Function to handle quantity change and update total price
     const handleQuantityChange = (newQuantity) => {
         if (newQuantity > 0) {
             setQuantity(newQuantity);
+<<<<<<< HEAD
             // Update total price when quantity changes
             setTotalPrice(newQuantity * (selectedSize ? getSizePrice(selectedSize) : 0));
         }
@@ -65,11 +82,19 @@ const ProductDetail = () => {
     };
 
     const handleAddToCart = async () => {
+=======
+            setTotalPrice(newQuantity * product.price); // Update total price
+        }
+    };
+
+    const handleAddToCart = () => {
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
         const userId = Cookies.get('userId');
         if (!userId) {
             console.error("User is not logged in. Cannot add to cart.");
             return;
         }
+<<<<<<< HEAD
         
         try {
             const cartItem = {
@@ -95,12 +120,34 @@ const ProductDetail = () => {
     return (
         <div className="flex flex-col min-h-screen">
             <Navbar />
+=======
+
+        const cartKey = `cart_${userId}`;
+        let cartItems = localStorage.getItem(cartKey) ? JSON.parse(localStorage.getItem(cartKey)) : [];
+
+        // Add product with selected quantity to the cart
+        cartItems.push({
+            ...product,
+            quantity, // Add selected quantity to the product data
+            totalPrice, // Add total price
+        });
+
+        localStorage.setItem(cartKey, JSON.stringify(cartItems));
+        navigate('/market/cart');
+    };
+
+    return (
+        <div className="flex flex-col min-h-screen">
+            <Navbar />
+            
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
             <main className="flex-grow py-16 px-8 mt-20">
                 {product ? (
                     <div className="mx-auto container grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div>
                             <img src={`http://localhost:7684/uploads/${product.image}`} alt={product.productName} className="h-[36rem] object-cover rounded-md"/>
                         </div>
+<<<<<<< HEAD
                         <div className="flex flex-col">
                             <p className="mb-4 font-bold text-4xl">{product.productName}</p>
                             <div className="flex items-center mb-4 text-gray-600">
@@ -124,6 +171,24 @@ const ProductDetail = () => {
                                     ))}
                                 </div>
                             </div>
+=======
+
+                        <div className="flex flex-col">
+                            <p className="mb-4 font-bold text-4xl">
+                                {product.productName}
+                            </p>
+                            <div className="flex items-center mb-4 text-gray-400">
+                                <p className="capitalize ">Category: {product.category}</p>
+                            </div>
+                            <div className="flex items-center mb-4 text-gray-400">
+                                <p className="capitalize ">Description: {product.description}</p>
+                            </div>
+                            {/* Display total price based on quantity */}
+                            <p className="text-gray-900 mb-4 font-bold text-3xl">
+                                ₱{totalPrice} {/* Updated total price */}
+                            </p>
+
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
                             <div className="mb-4">
                                 <p className='font-bold'>Quantity</p>
                                 <div className="flex items-center mt-2">
@@ -142,6 +207,10 @@ const ProductDetail = () => {
                                     </button>
                                 </div>
                             </div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
                             <div className="my-8">
                                 <button
                                     onClick={handleAddToCart}
@@ -156,6 +225,10 @@ const ProductDetail = () => {
                     <p>Loading product details...</p>
                 )}
             </main>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
             <Footer />
         </div>
     );
