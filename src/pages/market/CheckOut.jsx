@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
@@ -10,24 +9,11 @@ const CheckOut = () => {
     const { cartItems = [], total = 0 } = location.state || {};
     const navigate = useNavigate();
     const userId = Cookies.get('userId');
-=======
-import React, { useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import Cookies from 'js-cookie';
-import axiosInstance from '../../utils/AxiosInstance';
-
-const CheckOut = () => {
-
-    const location = useLocation();
-    const { cartItems, total } = location.state || {}; // Get cart items and total from state
-    const navigate = useNavigate();
->>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
 
     const [formData, setFormData] = useState({
         name: '',
         address: '',
         contactNumber: '',
-<<<<<<< HEAD
         paymentMethod: 'gcash',
         shippingLocation: '',
     });
@@ -69,41 +55,26 @@ const CheckOut = () => {
             default:
                 return 0;
         }
-=======
-        paymentMethod: 'gcash', // Default payment method
-    });
-
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
->>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-<<<<<<< HEAD
     
         if (currentCartItems.length === 0) {
             setError('You cannot confirm your order with no items in the cart.');
             return;
         }
     
-=======
-
-        const userId = Cookies.get('userId'); // Get user ID from cookies
-    
-        // Create the order object to send to the backend
->>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
         const newOrder = {
             userId,
             name: formData.name,
             address: formData.address,
             contactNumber: formData.contactNumber,
             paymentMethod: formData.paymentMethod,
-<<<<<<< HEAD
             shippingLocation: formData.shippingLocation,
             items: currentCartItems.map(item => ({
                 productName: item.productName,
-                price: item.totalPrice,
+                price: item.totalPrice, // Still useful for order details
                 productQuantity: item.quantity || 1,
                 size: item.size,
                 image: item.image,
@@ -114,15 +85,33 @@ const CheckOut = () => {
         };
     
         try {
-            const response = await axios.post('http://localhost:7684/api/createOrders', newOrder, {
+            // Create the order
+            const response = await axios.post('http://localhost:7684/api/orders', newOrder, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
     
             if (response.status === 201) {
+                // Decrement stock for each item in the order
+                await Promise.all(currentCartItems.map(async item => {
+                    const stockUpdatePayload = {
+                        size: item.size,
+                        quantity: item.quantity || 1, // Always ensure this is defined
+                    };
+                    
+                    console.log('Updating stock for:', item._id, stockUpdatePayload); // Log the details
+                    
+                    try {
+                        const response = await axios.put(`http://localhost:7684/api/finishGoods/${item._id}`, stockUpdatePayload);
+                        console.log('Stock update response:', response.data); // Log response from server
+                    } catch (updateError) {
+                        console.error('Error updating stock:', updateError.response?.data || updateError);
+                    }
+                }));
+    
                 // Remove items from the cart in the database
-                await Promise.all(currentCartItems.map(item => 
+                await Promise.all(currentCartItems.map(item =>
                     axios.delete(`http://localhost:7684/api/cart/${userId}/${item._id}`)
                 ));
     
@@ -137,16 +126,22 @@ const CheckOut = () => {
             }
         } catch (error) {
             console.error('Error submitting order:', error);
-            setError('There was an error submitting your order. Please try again.');
+            const errorMessage = error.response?.data?.message || 'There was an error submitting your order. Please try again.';
+            setError(errorMessage);
         }
     };
+    
+    
+    
+    
+
     
     
 
     return (
         <div className="min-h-screen p-8">
             <div className='grid grid-cols-2 gap-4 px-40'>
-                <div className='border border-gray-500 p-6 rounded  p-6 rounded h-[550px] overflow-y-auto'>
+                <div className='border border-gray-500 p-6 rounded  h-[550px] overflow-y-auto'>
                     <h1 className="text-3xl font-bold mb-6">Checkout</h1>
                     {error && <p className="text-red-500">{error}</p>}
                     <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 ">
@@ -264,105 +259,3 @@ const CheckOut = () => {
 };
 
 export default CheckOut;
-=======
-            items: cartItems,
-            totalAmount: total,
-            date: new Date().toISOString(), // Add the current date in ISO format
-        };
-    
-        try {
-            // Send the order data to the backend
-            const response = await axios.get('http://localhost:7684/api/createOrders', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newOrder),
-            });
-    
-            if (!response.ok) {
-                throw new Error('Failed to submit order');
-            }
-    
-            // Optionally, get the created order from the response
-            const createdOrder = await response.json();
-    
-            // Clear the cart after confirming the order
-            localStorage.removeItem(`cart_${userId}`);
-    
-            // Navigate to the orders page
-            navigate('/market/orders');
-        } catch (error) {
-            console.error('Error submitting order:', error);
-            // Handle error (e.g., show error message to user)
-        }
-    }
-
-  return (
-    <>
-        <div className="min-h-screen p-8">
-            <h1 className="text-3xl font-bold mb-6">Checkout</h1>
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4">
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">Name</label>
-                    <input
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-                        required
-                    />
-                </div>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">Address</label>
-                    <input
-                        type="text"
-                        name="address"
-                        value={formData.address}
-                        onChange={handleChange}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-                        required
-                    />
-                </div>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">Contact Number</label>
-                    <input
-                        type="text"
-                        name="contactNumber"
-                        value={formData.contactNumber}
-                        onChange={handleChange}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-                        required
-                    />
-                </div>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">Payment Method</label>
-                    <select
-                        name="paymentMethod"
-                        value={formData.paymentMethod}
-                        onChange={handleChange}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-                        required
-                    >
-                        <option value="gcash">GCash</option>
-                        <option value="cod">Cash on Delivery</option>
-                    </select>
-                </div>
-                <div className="font-bold text-lg">
-                    Total: ₱{total}
-                </div>
-                <button
-                    type="submit"
-                    className="bg-blue-500 text-white py-2 px-4 rounded mt-4"
-                >
-                    Confirm Order
-                </button>
-            </form>
-        </div>
-    </>
-  )
-}
-
-export default CheckOut
->>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf

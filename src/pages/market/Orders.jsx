@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import Navbar from '../../components/Navbar';
@@ -12,60 +11,26 @@ const Orders = () => {
     const [activeTab, setActiveTab] = useState('To Ship');
 
     const userId = Cookies.get('userId');
-=======
-import React, { useEffect, useState } from 'react'
-import Cookies from 'js-cookie'
-import Navbar from '../../components/Navbar'
-import Footer from '../../components/Footer'
-import axiosInstance from '../../utils/AxiosInstance'
-import axios from 'axios'
-
-
-const Orders = () => {
-
-    const [orders, setOrders] = useState([]); // Always start with an empty array
-    const [loading, setLoading] = useState(true); // Add loading state
-    const [error, setError] = useState(null); // Add error state
-
-    const userId = Cookies.get('userId'); // Get the user ID from cookies
->>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
 
     useEffect(() => {
         const fetchOrders = async () => {
             try {
                 const response = await axios.get(`http://localhost:7684/api/showOrdersByUser/${userId}`);
-<<<<<<< HEAD
                 setOrders(response.data);
             } catch (err) {
                 setError(err.message);
             } finally {
                 setLoading(false);
-=======
-                
-                if (!response.ok) {
-                    throw new Error('Failed to fetch orders');
-                }
-
-                const data = await response.json();
-                setOrders(data); // Set fetched orders
-            } catch (err) {
-                setError(err.message);
-            } finally {
-                setLoading(false); // Stop loading after fetch
->>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
             }
         };
 
         fetchOrders();
     }, [userId]);
 
-<<<<<<< HEAD
     const handleTabChange = (tab) => {
         setActiveTab(tab);
     };
 
-=======
->>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -74,7 +39,6 @@ const Orders = () => {
         return <div>Error: {error}</div>;
     }
 
-<<<<<<< HEAD
     const tabItems = [
         { label: 'To Ship', icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6"><path strokeLinecap="round" strokeLinejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0-3-3m3 3 3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" /></svg>},
         { label: 'To Receive', icon: <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" /></svg> },
@@ -157,44 +121,3 @@ const Orders = () => {
 }
 
 export default Orders;
-=======
-  return (
-    <>
-        <Navbar />
-            <div className="min-h-screen p-8">
-                <h1 className="text-3xl font-bold mb-6">Your Orders</h1>
-                {orders.length > 0 ? (
-                    <div className="grid grid-cols-1 gap-4">
-                        {orders.map((order) => (
-                            <div key={order._id} className="border p-4 rounded shadow-sm">
-                                <h2 className="text-xl font-bold mb-2">Order #{order._id}</h2>
-                                <p><strong>Date:</strong> {new Date(order.orderDate).toLocaleString()}</p>
-                                <p><strong>Name:</strong> {order.customerName}</p>
-                                <p><strong>Address:</strong> {order.address}</p>
-                                <p><strong>Contact Number:</strong> {order.contactNumber}</p>
-                                <p><strong>Payment Method:</strong> {order.paymentMethod}</p>
-                                <div className="mt-4">
-                                    <h3 className="font-bold">Items:</h3>
-                                    <ul>
-                                        {order.items.map((item, index) => (
-                                            <li key={index}>
-                                                {item.productName} - ₱{item.price}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                                <p className="mt-4 font-bold">Total Amount: ₱{order.totalAmount}</p>
-                            </div>
-                        ))}
-                    </div>
-                ) : (
-                    <p>You have no orders yet.</p>
-                )}
-            </div>
-        <Footer />
-    </>
-  )
-}
-
-export default Orders
->>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf

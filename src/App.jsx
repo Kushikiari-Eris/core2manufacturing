@@ -14,10 +14,12 @@ import Cart from './pages/market/Cart';
 import Orders from './pages/market/Orders';
 import CheckOut from './pages/market/CheckOut';
 import AllProducts from './pages/market/AllProducts';
-<<<<<<< HEAD
 import Dashboard from './pages/admin/Dashboard';
-=======
->>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
+import Finish from './pages/admin/inventory/stocks/Finish';
+import Raw from './pages/admin/inventory/stocks/Raw';
+import ProductTracking from './pages/admin/products/ProductTracking';
+import Users from './pages/admin/products/Users';
+import Auditor from './pages/auditor/Auditor';
 
 function App() {
   return (
@@ -40,13 +42,8 @@ function RoutesWrapper() {
       <Route path='/' element={<Home />} />
 
       {/**Auth */}
-<<<<<<< HEAD
-      <Route path='/register' element={!loggedIn ? <Register /> : role === 'admin' ? <Navigate to='/admin/dashboard' /> : <Navigate to='/market' />} />
-      <Route path='/login' element={!loggedIn ? <Login /> : role === 'admin' ? <Navigate to='/admin/dashboard' /> : <Navigate to='/market' />} />
-=======
-      <Route path='/register' element={!loggedIn ? <Register /> : role === 'admin' ? <Navigate to='/admin' /> : <Navigate to='/market' />} />
-      <Route path='/login' element={!loggedIn ? <Login /> : role === 'admin' ? <Navigate to='/admin' /> : <Navigate to='/market' />} />
->>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
+      <Route path='/register' element={!loggedIn ? <Register /> : role === 'admin' ? <Navigate to='/admin/dashboard' /> : role === 'auditor' ? <Navigate to='/auditor/dashboard' /> : <Navigate to='/market' />} />
+      <Route path='/login' element={!loggedIn ? <Login /> : role === 'admin' ? <Navigate to='/admin/dashboard' /> : role === 'auditor' ? <Navigate to='/auditor' /> : <Navigate to='/market' />} />
 
       {/**MarketPage */}
       <Route path='/market' element={loggedIn && role === 'user' ? <Market /> : <Navigate to='/login' />} />
@@ -60,10 +57,16 @@ function RoutesWrapper() {
       <Route path='/admin' element={loggedIn && role === 'admin' ? <AdminPanel /> : <Navigate to='/login' />} >
         <Route path='product' element={<Product />} />
         <Route path='orders' element={<ProductOrders/>}/>
-<<<<<<< HEAD
+        <Route path='users' element={<Users/>}/>
+        <Route path='productTracking' element={<ProductTracking/>}/>
         <Route path='dashboard' element={<Dashboard/>}/>
-=======
->>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
+        <Route path='raw' element={<Raw/>}/>
+        <Route path='finish' element={<Finish/>}/>
+      </Route>
+
+      {/**AuditorPage */}
+      <Route path='/auditor' element={loggedIn && role === 'auditor' ? <Auditor /> : <Navigate to='/login' />} >
+        
       </Route>
     </Routes>
   );

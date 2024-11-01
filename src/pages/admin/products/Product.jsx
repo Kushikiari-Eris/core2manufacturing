@@ -1,429 +1,201 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import { toast, ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import axiosInstance from '../../../utils/AxiosInstance'
-
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Product = () => {
-
-    const [product, setProduct] = useState([])
-    const [createProduct, setCreateProduct] = useState({
-        productName: '',
-        description: '',
-        category: '',
-<<<<<<< HEAD
-        sizePrice: { S: 0, M: 0, L: 0 },
-=======
-        price: 0,
->>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
-    })
-
-    const [editProduct, setEditProduct] = useState(null) // Track the product being edited
-    const [selectedFile, setSelectedFile] = useState(null)
-
-<<<<<<< HEAD
-
-=======
->>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
-    const createProductForm = async (e) => {
-        e.preventDefault();
-
-        const category = document.getElementById('category').value;
-
-        if (!['soap', 'detergent'].includes(category)) {
-            toast.error('Invalid category selected.')
-            return
-        }
-
-<<<<<<< HEAD
-        const formData = new FormData(); 
-        
-        const prices = [
-            { size: 'Small', price: createProduct.sizePrice.S },
-            { size: 'Medium', price: createProduct.sizePrice.M },
-            { size: 'Large', price: createProduct.sizePrice.L },
-        ];
-=======
-        const formData = new FormData(); // Use FormData to handle file uploads
->>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
-
-        // Append text data
-        formData.append('productName', createProduct.productName)
-        formData.append('description', createProduct.description)
-        formData.append('category', category.toLowerCase())
-<<<<<<< HEAD
-        formData.append('prices', JSON.stringify(prices))
-=======
-        formData.append('price', createProduct.price)
->>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
-        
+    const [products, setProducts] = useState([]); // State for products
+    const [loading, setLoading] = useState(true); // State for loading
     
-        // Append the image file if selected
-        if (selectedFile) {
-          formData.append('image', selectedFile);
+    //Pagination
+    const itemsPerPage = 2; // Number of items per page
+    const [currentPage, setCurrentPage] = useState(1);
+
+    // Calculate the total number of pages
+    const totalPages = Math.ceil(products.length / itemsPerPage);
+
+    // Slice the products array for the current page
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const currentProducts = products.slice(startIndex, startIndex + itemsPerPage);
+
+    //Pageination
+    const handleNextPage = () => {
+        if (currentPage < totalPages) {
+        setCurrentPage(currentPage + 1);
         }
+    };
 
-        try {
-            if (editProduct) {
-                // If editing, send a PUT request with the FormData
-                const res = await axios.put(`http://localhost:7684/api/updateProduct/${editProduct._id}`, formData, {
-                  headers: {
-                    'Content-Type': 'multipart/form-data',
-                  },
-                })
-        
-
-            // Update the product list with the new image URL
-            setProduct((prevProducts) =>
-                prevProducts.map((prod) =>
-                    prod._id === editProduct._id ? { ...prod, ...res.data.product } : prod
-                )
-            )
-
-                toast.success('Product updated successfully!')
-                
-            } else {
-               // For new product creation, use POST with FormData
-               const res = await axios.post('http://localhost:7684/api/create', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
-                });
-
-                // Append the new product to the existing list
-                setProduct((prevProducts) => [res.data.product, ...prevProducts])
-
-                toast.success('Product added successfully!')
-            }
-
-            // Reset form fields and editProduct
-            setCreateProduct({
-                productName: '',
-                description: '',
-                category: '',
-<<<<<<< HEAD
-                sizePrice: { S: 0, M: 0, L: 0 },
-=======
-                price: 0,
->>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
-            });
-            setEditProduct(null)
-            setSelectedFile(null)
-
-            // Close the modal
-            document.getElementById('my_modal_1').close()
-        } catch (error) {
-            console.error('Error creating/updating product:', error)
-            toast.error('Failed to create/update product. Please try again.')
+    const handlePreviousPage = () => {
+        if (currentPage > 1) {
+        setCurrentPage(currentPage - 1);
         }
-    }
-
-    const handleFileChange = (e) => {
-        setSelectedFile(e.target.files[0]);
-      }
-
-    const fetchProduct = async () => {
-        try {
-            const response = await axios.get('http://localhost:7684/api/showAllProduct');
-            if (response.status === 200) {
-                setProduct(response.data.products)
-            } else {
-                console.error('Failed to fetch products')
-            }
-        } catch (error) {
-            console.error('Error fetching products:', error)
-        }
-    }
-
-    const handleEditProduct = (prod) => {
-<<<<<<< HEAD
-        console.log(prod); // Log the product to check its structure
-
-        // Initialize sizePrice object
-        const sizePrice = {};
-    
-        // Populate sizePrice from the prices array
-        prod.prices.forEach(priceItem => {
-            sizePrice[priceItem.size] = priceItem.price; // e.g., sizePrice["S"] = 200
-        });
-    
-        // Set the state with the properly structured sizePrice
-=======
-        // Fill form with product data
->>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
-        setCreateProduct({
-            productName: prod.productName,
-            description: prod.description,
-            category: prod.category,
-<<<<<<< HEAD
-            sizePrice, // Now this will have the correct values
-        });
-        
-        setEditProduct(prod);
-        document.getElementById('my_modal_1').showModal();
-=======
-            price: prod.price,
-        });
-        setEditProduct(prod); // Set the product to be edited
-        document.getElementById('my_modal_1').showModal() // Open modal
->>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
-    }
-
-    const handleDeleteProduct = async (prodId) => {
-        const confirmDelete = window.confirm("Are you sure you want to delete this product?")
-        if (!confirmDelete) return
-
-        try {
-            await axios.delete(`http://localhost:7684/api/deleteProduct/${prodId}`)
-            
-            // Remove the deleted product from the state
-            setProduct((prevProducts) => prevProducts.filter((prod) => prod._id !== prodId))
-
-            toast.success('Product deleted successfully!')
-        } catch (error) {
-            console.error('Error deleting product:', error)
-            toast.error('Failed to delete product. Please try again.')
-        }
-    }
+    };
 
     useEffect(() => {
-        fetchProduct()
-    }, [])
-    
-    
+        fetchProducts();
+    }, []);
 
-
-
-  return (
-    <>
-    
-        <div className="p-4 sm:ml-64 bg-gray-100 h-screen">
-        <div className="p-4   rounded-lg dark:border-gray-700 mt-20">
-            <nav className="flex mb-4" aria-label="Breadcrumb">
-            <ol className="inline-flex items-center space-x-1 md:space-x-3 rtl:space-x-reverse">
-                <li className="inline-flex items-center">
-                <a href="#" className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-gray-900">
-                    <svg className="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
-                    </svg>
-                    Home
-                </a>
-                </li>
-                <li>
-                <div className="flex items-center">
-                    <svg className="w-3 h-3 text-gray-400 mx-1 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 9 4-4-4-4"/>
-                    </svg>
-                    <a href="#" className="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-gray-900">E-Commerce</a>
-                </div>
-                </li>
-                <li aria-current="page">
-                <div className="flex items-center">
-                    <svg className="w-3 h-3 text-gray-400 mx-1 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 9 4-4-4-4"/>
-                    </svg>
-                    <span className="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">Products</span>
-                </div>
-                </li>
-            </ol>
-            </nav>
-            <h2 className="mb-4 text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-4xl dark:text-gray-900">All Products</h2>
+    const fetchProducts = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.get('http://localhost:7684/api/finishGoods');
             
+            // Check if the response data is an array
+            if (Array.isArray(response.data)) {
+                setProducts(response.data); // Directly set the products from response.data
+                console.log("Products set:", response.data);
+            } else {
+                console.warn("Products not in expected format", response.data);
+            }
+        } catch (error) {
+            console.error("Error fetching products:", error);
+            toast.error("Failed to fetch products.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
-<<<<<<< HEAD
-                <div className="relative  sm:rounded-lg flex items-center justify-between">
-=======
-                <div className="relative overflow-x-auto shadow-md sm:rounded-lg flex items-center justify-between">
->>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
-                    <div className="relative flex-grow">
-                            <label htmlFor="table-search" className="sr-only">Search</label>
-                            <div className="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-                                <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                                </svg>
-                            </div>
-<<<<<<< HEAD
-                            <input type="text" id="table-search" className=" block pt-4 ps-10 pb-4 text-sm text-gray-900 border border-gray-300 rounded-lg w-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for items"/>
-                        </div>
-                        
-                        
-                        <button className="text-white bg-green-700 hover:bg-green-800 font-medium rounded-lg text-sm px-5 py-4 text-center ml-4 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"  onClick={() => {
-=======
-                            <input type="text" id="table-search" className="flex block pt-4 ps-10 pb-4 text-sm text-gray-900 border border-gray-300 rounded-lg w-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for items"/>
-                        </div>
-                        {/* Open the modal using document.getElementById('ID').showModal() method */}
-                        <button className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ml-4 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"  onClick={() => {
->>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
-                                setEditProduct(null); // Clear any existing edit product
-                                setCreateProduct({
-                                    productName: '',
-                                    description: '',
-                                    category: '',
-<<<<<<< HEAD
-                                    sizePrice: { S: 0, M: 0, L: 0 },
-=======
-                                    price: 0,
->>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
-                                });
-                                document.getElementById('my_modal_1').showModal();
-                            }}>Add new</button>
-                            <dialog id="my_modal_1" className="modal">
-                                <div className="modal-box">
-                                    <h3 className="font-bold text-lg mb-5">{editProduct ? 'Edit Product' : 'Add new product'}</h3>
-                                    <form className="max-w-sm mx-auto" onSubmit={createProductForm}>
-                                        <div className="mb-5">
-                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Image</label>
-                                            <input type="file" name='image' onChange={handleFileChange} className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"/>
-                                        </div>
-                                        <div className="mb-5">
-                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Product Name</label>
-                                            <input type="text" id="productName" value={createProduct.productName} onChange={(e) => setCreateProduct({ ...createProduct, productName: e.target.value })} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Product Name" required />
-                                        </div>
-                                        <div className="mb-5">
-                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
-                                            <textarea rows="4" value={createProduct.description} onChange={(e) => setCreateProduct({ ...createProduct, description: e.target.value })} className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Product Description"></textarea>
-                                        </div>
-                                        <div className="mb-5">
-                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Category</label>
-                                            <select id="category" value={createProduct.category} onChange={(e) => setCreateProduct({ ...createProduct, category: e.target.value })} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                                <option value="soap">Soap</option>
-                                                <option value="detergent">Detergent</option>
-                                            </select>
-                                        </div>
-                                        <div className="mb-5">
-<<<<<<< HEAD
-                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Small (S) Price</label>
-                                            <input 
-                                                type="number" 
-                                                value={createProduct.sizePrice.S || ""} 
-                                                onChange={(e) => setCreateProduct({ 
-                                                    ...createProduct, 
-                                                    sizePrice: { ...createProduct.sizePrice, S: parseFloat(e.target.value) || 0 }
-                                                })} 
-                                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                placeholder="Price for S" required 
-                                            />
-                                        </div>
-
-                                        <div className="mb-5">
-                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Medium (M) Price</label>
-                                            <input 
-                                                type="number" 
-                                                value={createProduct.sizePrice.M || ""} 
-                                                onChange={(e) => setCreateProduct({ 
-                                                    ...createProduct, 
-                                                    sizePrice: { ...createProduct.sizePrice, M: parseFloat(e.target.value) || 0 }
-                                                })} 
-                                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                placeholder="Price for M" required 
-                                            />
-                                        </div>
-
-                                        <div className="mb-5">
-                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Large (L) Price</label>
-                                            <input 
-                                                type="number" 
-                                                value={createProduct.sizePrice.L || ""} 
-                                                onChange={(e) => setCreateProduct({ 
-                                                    ...createProduct, 
-                                                    sizePrice: { ...createProduct.sizePrice, L: parseFloat(e.target.value) || 0 }
-                                                })} 
-                                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                                placeholder="Price for L" required 
-                                            />
-=======
-                                            <label htmlFor="number-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Price:</label>
-                                            <input  type="number" id="number-input" value={createProduct.price || ""}  onChange={(e) => setCreateProduct({ ...createProduct, price: parseFloat(e.target.value) || 0 })}   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Price" required />
->>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
-                                        </div>
-                                        <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">{editProduct ? 'Update' : 'Add'}</button>
-                                        <button type="button" onClick={() => document.getElementById('my_modal_1').close()} className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                                    </form>
+    return (
+        <>
+            <div className="p-4 sm:ml-64 bg-gray-100 h-screen">
+                <div className="p-4 rounded-lg dark:border-gray-700 mt-20">
+                    {/* Breadcrumb Navigation */}
+                    <nav className="flex mb-4" aria-label="Breadcrumb">
+                        <ol className="inline-flex items-center space-x-1 md:space-x-3 rtl:space-x-reverse">
+                            <li className="inline-flex items-center">
+                                <a href="#" className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-gray-900">
+                                    <svg className="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z"/>
+                                    </svg>
+                                    Home
+                                </a>
+                            </li>
+                            <li>
+                                <div className="flex items-center">
+                                    <svg className="w-3 h-3 text-gray-400 mx-1 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 9 4-4-4-4"/>
+                                    </svg>
+                                    <a href="#" className="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-gray-900">Product Execution</a>
                                 </div>
-                            </dialog>
-
+                            </li>
+                            <li aria-current="page">
+                                <div className="flex items-center">
+                                    <svg className="w-3 h-3 text-gray-400 mx-1 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 9 4-4-4-4"/>
+                                    </svg>
+                                    <span className="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">Product Launcher</span>
+                                </div>
+                            </li>
+                        </ol>
+                    </nav>
+                    <h2 className="mb-4 text-3xl font-extrabold leading-none tracking-tight text-gray-900 md:text-4xl dark:text-gray-900">Product Launcher</h2>
                         
+                    {/* Search Bar and Add Product Button */}
+                    <div className="relative  sm:rounded-lg flex items-center">
+                        <label htmlFor="table-search" className="sr-only">Search</label>
+                        <div className="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                            <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                            </svg>
+                        </div>
+                            <input type="text" id="table-search" className=" block pt-4 ps-10 pb-4 text-sm text-gray-900 border border-gray-300 rounded-lg w-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for items"/>
                     </div>
-                    
-                    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mt-4">
-                        <thead className="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-500 dark:text-gray-400">
-                            <tr>
-<<<<<<< HEAD
-                            <th scope="col" className="px-6 py-3"> Product Image</th>
-=======
-                            <th scope="col" className="p-4"></th>
->>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
-                                <th scope="col" className="px-6 py-3">
-                                    Product Name
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Description
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Category
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Price
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                    Action
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {product && product.length > 0 ? (
-                                product.map((prod) => (
-                                    <tr key={prod._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                        <td className="px-6 py-4">
-<<<<<<< HEAD
-                                            <img src={`http://localhost:7684/uploads${prod.image.startsWith('/') ? '' : '/'}${prod.image}`} alt='' className="w-[100px] h-auto max-w-none object-cover rounded "/>
-=======
-                                            <img src={`http://localhost:7684/uploads${prod.image.startsWith('/') ? '' : '/'}${prod.image}`} alt='' className="w-16 h-16 object-cover rounded"/>
->>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
-                                        </td>
-                                        <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            {prod.productName}
-                                        </th>
-                                        <td className="px-6 py-4">{prod.description}</td>
-                                        <td className="px-6 py-4">{prod.category}</td>
-<<<<<<< HEAD
-                                        <td className="px-6 py-4">
-                                            {prod.prices.length > 0 ? (
-                                                prod.prices.map((priceObj) => (
-                                                    <p key={priceObj.size}> 
-                                                        {priceObj.size}: {priceObj.price}
-                                                    </p>
-                                                ))
-                                            ) : (
-                                                <p>N/A</p>
-                                            )}
-                                        </td>
-                                        <td className="px-6 py-10 flex">
-                                            <button className="font-medium text-white dark:text-blue-500 border p-2 rounded-md bg-blue-500 hover:bg-blue-300 mr-1" onClick={() => handleEditProduct(prod)}>Edit</button>
-                                            <button className="font-medium text-white dark:text-blue-500 border p-2 rounded-md bg-red-500 hover:bg-red-300"  onClick={() => handleDeleteProduct(prod._id)}>Delete</button>
-=======
-                                        <td className="px-6 py-4">{prod.price}</td>
-                                        <td className="px-6 py-4">
-                                            <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline mr-4" onClick={() => handleEditProduct(prod)}>Edit</a>
-                                            <a href="#" className="font-medium text-red-600 dark:text-red-500 hover:underline"  onClick={() => handleDeleteProduct(prod._id)}>Delete</a>
->>>>>>> 17e54ee1d090ce19e37c289bdadfdc85dc1313cf
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan="6" className="px-6 py-4 text-center">No products available.</td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-        </div>
-        <ToastContainer />  {/* Add Toast Container */}
-        
-    </>
-  )
-}
 
-export default Product
+                    {/* Products Table */}
+                    {loading ? (
+                        <p>Loading products...</p>
+                    ) : (
+                        <div className="overflow-x-auto relative shadow-md sm:rounded-lg mt-5">
+                            <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                <thead className="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-500 dark:text-gray-400">
+                                <tr>
+                                <th scope="col" className="px-6 py-3"> Product Image</th>
+                                    <th scope="col" className="px-6 py-3">
+                                        Product Name
+                                    </th>
+                                    <th scope="col" className="px-6 py-3">
+                                        Description
+                                    </th>
+                                    <th scope="col" className="px-6 py-3">
+                                        Category
+                                    </th>
+                                    <th scope="col" className="px-6 py-3">
+                                        Size/Price
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {currentProducts && currentProducts.length > 0 ? (
+                                    currentProducts.map((prod) => (
+                                        <tr key={prod._id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                            <td className="px-6 py-4">
+                                                <img 
+                                                    src={`http://localhost:7684/uploads${typeof prod.image === 'string' && prod.image.startsWith('/') ? '' : '/'}${prod.image}`} 
+                                                    alt='' 
+                                                    className="w-[100px] h-auto max-w-none object-cover rounded "/>
+                                            </td>
+                                            <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                {prod.productName}
+                                            </th>
+                                            <td className="px-6 py-4">{prod.description}</td>
+                                            <td className="px-6 py-4">{prod.category}</td>
+                                            <td className="px-6 py-4">
+                                                {prod.unitPrize && prod.unitPrize.length > 0 ? (
+                                                    prod.unitPrize.map((priceObj) => (
+                                                        <p key={priceObj._id}> 
+                                                            {priceObj.size}: {priceObj.price}
+                                                        </p>
+                                                    ))
+                                                ) : (
+                                                    <p>N/A</p>
+                                                )}
+                                            </td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="6" className="px-6 py-4 text-center">No products available.</td>
+                                    </tr>
+                                )}
+                                </tbody>
+                            </table>
+
+                            {/* Pagination Controls */}
+                            {totalPages > 1 && (
+                                <nav className="flex px-6 py-2 justify-center items-center gap-x-1 bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600" aria-label="Pagination">
+                                <button type="button" onClick={handlePreviousPage} disabled={currentPage === 1} className="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" aria-label="Previous">
+                                    <svg className="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="m15 18-6-6 6-6"></path>
+                                    </svg>
+                                    <span aria-hidden="true" className="hidden sm:block">Previous</span>
+                                </button>
+                                
+                                <div className="flex items-center gap-x-1">
+                                    {/* Display Previous Page */}
+                                    <button type="button" className={`min-h-[38px] min-w-[38px] flex justify-center items-center ${currentPage === 1 ? 'bg-gray-400' : 'bg-gray-200'} text-gray-800 py-2 px-3 text-sm rounded-lg focus:outline-none focus:bg-gray-300 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-600 dark:text-white dark:focus:bg-neutral-500`} disabled>
+                                    {currentPage > 1 ? currentPage - 1 : 1}
+                                    </button>
+                                    {/* Display Next Page */}
+                                    <button type="button" className={`min-h-[38px] min-w-[38px] flex justify-center items-center ${currentPage < totalPages ? 'bg-gray-200' : 'bg-gray-400'} text-gray-800 py-2 px-3 text-sm rounded-lg focus:outline-none focus:bg-gray-300 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-600 dark:text-white dark:focus:bg-neutral-500`} disabled>
+                                    {currentPage < totalPages ? currentPage + 1 : totalPages}
+                                    </button>
+                                </div>
+                                
+                                <button type="button" onClick={handleNextPage} disabled={currentPage === totalPages} className="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10">
+                                    <span aria-hidden="true" className="hidden sm:block">Next</span>
+                                    <svg className="shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="m9 18 6-6-6-6"></path>
+                                    </svg>
+                                </button>
+                                </nav>
+                                )}
+                        </div>
+                    )}
+                </div>
+            </div>
+            <ToastContainer />
+        </>
+    );
+};
+
+export default Product;
